@@ -1,0 +1,166 @@
+{{> layouts/header}}
+<style>
+    .wrapper {
+        position: relative;
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+    }
+
+    .image {
+        display: block;
+        width: 100px;
+        height: 100px;
+        height: auto;
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        width: 100px;
+        opacity: 0.4;
+        transition: .5s ease;
+        background-color: #008CBD;
+    }
+
+    .attend .overlay {
+        background-color: green;
+    }
+
+    .cancel .overlay {
+        background-color: red;
+    }
+
+    .wrapper:hover .overlay {
+        opacity: 1;
+    }
+
+    .text {
+        color: white;
+        font-size: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+    }
+
+    .listContainer {
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+</style>
+<div class="listContainer">
+    {{#unless gatheringInfo.exitYn}}
+    {{#when gatheringInfo.attendType 'equals' 1}}
+    <div class="wrapper attend">
+        <div class="image"></div>
+        <div class="overlay" style="background-color: green; opacity: 0.3">
+            <div class="text">신청</div>
+        </div>
+    </div>
+    {{/when}}
+    {{#when gatheringInfo.attendType 'equals' 2}}
+    <div class="wrapper cancel">
+        <div class="image"></div>
+        <div class="overlay" style="background-color: red; opacity: 0.3">
+            <div class="text">신청 취소</div>
+        </div>
+    </div>
+    {{/when}}
+    {{/unless}}
+
+    {{#gatheringInfo.memberList}}
+    <div class="wrapper" onclick="location.href='/members/{{userId}}'" id="{{userId}}">
+        <div class="image"></div>
+        <div class="overlay">
+            <div class="text">{{nickname}}</div>
+        </div>
+    </div>
+    {{/gatheringInfo.memberList}}
+</div>
+{{> layouts/footer}}
+
+<script id="gatheringNo">{{gatheringInfo.gatheringNo}}</script>
+<script>
+
+    $(".listContainer").on("click", ".attend", clickAttend);
+    $(".listContainer").on("click", ".cancel", clickCancel);
+
+
+    function clickAttend() {
+        var text = "신청하시겠습니까?";
+        var conf = confirm(text);
+        if (conf) {
+            attendGathering();
+        }
+    }
+    function clickCancel() {
+        var text = "취소하시겠습니까?";
+        var conf = confirm(text);
+        if (conf) {
+            cancelGathering()
+        }
+    }
+
+    function attendGathering() {
+        var gatheringNo = $("#gatheringNo").html();
+        console.log("attend");
+        $.ajax({
+            type: 'get',
+            url: '/gatherings/attend/' + gatheringNo,
+            dataType: 'json'
+        }).done(function (data) {
+            console.log(data);
+            if (data.status) {
+                var result = data.results;
+                var appendHtml = "<div class=\"wrapper\" onclick=\"location.href='/members/" + result.userId + "'\" id=" + "\"" + result.userId + "\">"
+                    + "<div class=\"image\"></div>"
+                    + "<div class=\"overlay\">"
+                    + "<div class=\"text\">" + result.nickname + "</div></div></div>";
+                $(".listContainer").append(appendHtml);
+
+
+                $(".attend").removeClass("attend").addClass("cancel");
+                $(".cancel .text").html("취소");
+                $(".cancel .overlay").css("background-color", "red");
+                $(".submit").attr("onclick", "").unbind('click');
+
+            } else {
+                alert(data.resultMessage);
+            }
+        }).fail(function () {
+            location.href = '/login?returnUrl=/gatherings/' + gatheringNo;
+        })
+    }
+
+
+    function cancelGathering() {
+        var gatheringNo = $("#gatheringNo").html();
+        console.log("cancel");
+        $.ajax({
+            type: 'get',
+            url: '/gatherings/cancel/' + gatheringNo,
+            dataType: 'json'
+        }).done(function (data) {
+            console.log(data);
+            if (data.status) {
+                var result = data.results;
+                $("#" + result.userId).remove();
+                $(".cancel").removeClass("cancel").addClass("attend");
+                $(".attend .text").html("신청");
+                $(".attend .overlay").css("background-color", "green");
+                $(".submit").attr("onclick", "").unbind('click');
+            } else {
+                alert(data.resultMessage);
+            }
+        }).fail(function () {
+            location.href = '/login?returnUrl=/gatherings/' + gatheringNo;
+        })
+    }
+</script>

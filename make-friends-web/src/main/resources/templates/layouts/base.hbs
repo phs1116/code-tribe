@@ -1,0 +1,33 @@
+<!DOCTYPE html xmlns:th="http://www.w3.org/1999/xhtml">
+<!--[if lte IE 7]>    <html lang="ko" class="lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]>        <html lang="ko" class="lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="ko"><!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{{default projectName "coupang frontend"}}</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="shortcut icon" href="//imgs.coupangcdn.com/image/coupang/favicon/favicon.ico" type="image/x-icon" />
+
+    {{assetStyle "vendor/normalize/normalize-v3.0.3.css"}}
+    {{!-- Sass로 생성되는 기본 css --}}
+    {{assetStyle "app/dist/style.min.css"}}
+
+    {{!-- 임시 css --}}
+    {{assetStyle "app/css/temp.css"}}
+
+    {{!-- requireJS --}}
+    {{assetRequireJs "vendor/requirejs/require.2.1.17.min.js" data-main="app/js/main"}}
+
+    {{!-- 페이지별 추가 스타일 등 --}}
+    {{#block "head"}}{{/block}}
+</head>
+
+<body data-controller="{{default controller}}">
+    <div class="content">
+        {{#block "content"}}{{/block}}
+    </div>
+
+    {{!-- 페이지별 추가 스크립트 등 --}}
+    {{#block "foot"}}{{/block}}
+</body>
+</html>

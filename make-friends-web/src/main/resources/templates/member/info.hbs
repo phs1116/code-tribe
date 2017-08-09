@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<!--[if lte IE 7]>
+<html lang="ko" class="lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]>
+<html lang="ko" class="lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="ko"><!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>Payment Make Friends</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="shortcut icon" href="//imgs.coupangcdn.com/image/coupang/favicon/favicon.ico" type="image/x-icon" />
+    {{> layouts/headers}}
+</head>
+
+<body>
+{{> layouts/navbar}}
+<div class="content container-fluid" style="width: 60%; padding-top: 20px; padding-bottom: 20px;">
+    <div>
+        <table class="table table-bordered">
+            <tr>
+                <td class="active"><strong>아이디</strong></td>
+                <td>{{memberInfo.userId}}</td>
+                <td class="active"><strong>닉네임</strong></td>
+                <td>{{memberInfo.nickname}}</td>
+            </tr>
+            <tr>
+                <td class="active" colspan="2"><strong>전화번호</strong></td>
+                <td colspan="2">{{memberInfo.phoneNumber}}</td>
+            </tr>
+            <tr>
+                <td class="active" colspan="2"><strong>이메일</strong></td>
+                <td colspan="2">{{memberInfo.email}}</td>
+            </tr>
+        </table>
+        <div style="text-align: right">
+        <a class="btn btn-default" href="/members/update/{{memberInfo.userId}}" role="button" style="text-align: right">정보 수정</a>
+        </div>
+    </div>
+    <div>
+        <ul class="nav nav-tabs">
+            <li role="presentation" id="attendTab"><a href="/members/{{memberInfo.userId}}/attend">참가한 모임</a></li>
+            <li role="presentation" id="hostTab"><a href="/members/{{memberInfo.userId}}/host">개설한 모임</a></li>
+        </ul>
+        {{> gathering/gatheringList}}
+    </div>
+</div>
+</body>
+<footer>
+    <script>
+        $(function () {
+            var tab = location.pathname.split('/')[3];
+            if (tab == undefined || tab == 'attend')
+                $("#attendTab").addClass('active');
+            else if (tab == 'host')
+                $("#hostTab").addClass("active");
+        })
+    </script>
+</footer>
+</html>
