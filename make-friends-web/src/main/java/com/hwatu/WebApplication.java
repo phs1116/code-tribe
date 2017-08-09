@@ -1,5 +1,6 @@
 package com.hwatu;
 
+import com.hwatu.configuration.HandlebarsConfig;
 import com.hwatu.configuration.WebInterceptorConfig;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +17,7 @@ import javax.servlet.Filter;
 import java.nio.charset.Charset;
 
 @SpringBootApplication
-@Import({ WebInterceptorConfig.class })
+@Import({ HandlebarsConfig.class, WebInterceptorConfig.class })
 public class WebApplication extends SpringBootServletInitializer {
 
 	@Override
