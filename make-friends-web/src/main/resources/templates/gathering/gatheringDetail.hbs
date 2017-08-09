@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!--[if lte IE 7]>
+<html lang="ko" class="lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]>
+<html lang="ko" class="lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="ko"><!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>Payment Make Friends</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link rel="shortcut icon" href="//imgs.coupangcdn.com/image/coupang/favicon/favicon.ico" type="image/x-icon" />
+    <script type="text/javascript" src="http://apis.daum.net/maps/maps3.js?apikey=3419ea623aa8f38277d0238630747bc0"></script>
+    {{> layouts/header}}
+
+    <style>
+        .panel-body {
+            min-height: 120px;
+        }
+    </style>
+</head>
+
+<body>
+{{> layouts/navbar}}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h1>
+                        [{{gatheringInfo.categoryName}}] {{gatheringInfo.gatheringTitle}}
+                        {{#if gatheringInfo.exitYn}}
+                        <button type="button" class="btn btn-default btn-lg" disabled>
+                            종료
+                        </button>
+                        {{/if}}
+                    </h1>
+                    <div class="row">
+                        <span class="col-md-4"><strong>작성자</strong><p>{{gatheringInfo.userId}}</p></span>
+                        <span class="col-md-4"><strong>모임 날짜</strong><p>{{formatDate gatheringInfo.gatheringAt}}</p></span>
+                        <span class="col-md-4"><strong>모임 장소</strong><p>{{default gatheringInfo.gatheringPlace "쿠팡 본사"}}</p></span>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <p>{{gatheringInfo.content}}</p>
+                </div>
+
+                <div class="panel-footer">
+                    {{#when gatheringInfo.latitude 'notEquals' null}}
+                    <div class="row" id="map"></div>
+                    {{/when}}
+                </div>
+
+                {{> gathering/attendMemberList}}
+            </div>
+
+            <a href="/gatherings" class="btn btn-default" style="margin: 3px;">목록</a>
+            {{#unless gatheringInfo.exitYn}}
+            {{#when gatheringInfo.attendType 'equals' 3}}
+            <a id="delete" class="btn btn-danger" style="float: right;  margin: 3px">삭제</a>
+            <a href="/gatherings/update/{{gatheringInfo.gatheringNo}}"  id="update" class="btn btn-info" style="float: right; margin: 3px">수정</a>
+            <a id="exit" class="btn btn-danger" style="float: right;  margin: 3px">모임 종료</a>
+            {{/when}}
+            {{/unless}}
+        </div>
+    </div>
+</div>
+</body>
+<footer>
+    {{> layouts/footer}}
+    <script id="latitude">{{default gatheringInfo.latitude "37.50748732908871"}}</script>
+    <script id="longitude">{{default gatheringInfo.longitude "127.05676417150869"}}</script>
+    <script id="longitude">{{gatheringInfo.gatheringNo}}</script>
+    <script>
+        $("#delete").on("click", clickDelete);
+        function clickDelete() {
+            var text = "삭제하시겠습니까?";
+            var conf = confirm(text);
+            if (conf) {
+                location.href="/gatherings/delete/"+$("#gatheringNo").html();
+            }
+        }
+
+        $("#exit").on("click", clickDelete);
+        function clickDelete() {
+            var text = "모임을 종료하시겠습니까?";
+            var conf = confirm(text);
+            if (conf) {
+                location.href="/gatherings/exit/"+$("#gatheringNo").html();
+            }
+        }
+        $(function () {
+            var container = document.getElementById("map");
+            if($('#latitude').html())
+            var position = new daum.maps.LatLng($('#latitude').html(), $('#longitude').html());
+            container.style.height = "250px";
+            var option = {
+                center: position
+            }
+            var map = new daum.maps.Map(container, option);
+            var marker = new daum.maps.Marker({ position: position });
+            marker.setMap(map);
+        })
+    </script>
+</footer>
+</html>

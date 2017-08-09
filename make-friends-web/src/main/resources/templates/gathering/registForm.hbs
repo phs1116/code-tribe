@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!--[if lte IE 7]>
+<html lang="ko" class="lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]>
+<html lang="ko" class="lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!-->
+<html lang="ko"><!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>Payment Make Friends</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+     <link rel="shortcut icon" href="//imgs.coupangcdn.com/image/coupang/favicon/favicon.ico" type="image/x-icon" />
+    {{> layouts/header}}
+    {{> layouts/formHeader}}
+  <link href = "/css/form.css" rel="stylesheet">
+</head>
+
+<body>
+{{> layouts/navbar}}
+<div class="content container-fluid" style="width: 60%; padding-top: 20px; padding-bottom: 20px;">
+    <!--//{{#block "content"}}{{/block}}-->
+    <form class="form" action="/gatherings/regist" method="post" id="registForm">
+        <div class="row">
+            <div class="form-group col-md-3">
+                <select class="form-control" name="categoryId">
+                    <option value="1">쿠요일</option>
+                    <option value="2">점심</option>
+                    <option value="3">저녁</option>
+                    <option value="4">COP</option>
+                    <option value="5">번개</option>
+                </select>
+            </div>
+            <div class="form-group col-md-9">
+                <input type="text" class="form-control" id="inputTitle" name="gatheringTitle" placeholder="Title">
+            </div>
+        </div>
+     <div class="row">
+            <div class="form-group col-md-6">
+                <div class='input-group date' id='datetimepicker'>
+                    <input type='text' class="form-control" name="gatheringAt" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <div class="input-group">
+                    <input class="form-control autocomplete" type="text" name="gatheringPlace" id="inputPlace">
+                    <span class="input-group-addon">
+                      <span class="glyphicon glyphicon-map-marker" style="size: 15px"></span>
+                </span>
+                </div>
+            </div>
+     </div>
+        <div class="row">
+            <div class="form-group">
+                <textarea class="form-control" id="inputContent" name="content" rows="10" style="resize : none; padding : 15px"></textarea>
+            </div>
+        </div>
+        <div class="row" id="map"></div>
+        <input type="hidden" id="inputLongitude" name="longitude">
+        <input type="hidden" id="inputLatitude" name="latitude">
+        <input type="submit" class="btn btn-default" onclick="sendAction()" value="Submit"></button>
+    </form>
+</div>
+
+{{!-- 페이지별 추가 스크립트 등 --}}
+{{#block "foot"}}{{/block}}
+{{> layouts/footer}}
+{{> layouts/formFooter}}
+</body>
+<footer>
+    <script>
+        $(function () {
+            $('#datetimepicker').datetimepicker({
+                defaultDate : new Date()
+            });
+        })
+    </script>
+  <script src="/js/form.js"></script>
+</footer>
+</html>

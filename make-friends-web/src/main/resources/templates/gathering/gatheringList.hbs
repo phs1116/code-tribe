@@ -1,0 +1,121 @@
+{{> layouts/header}}
+<select class="input-sm" id="category" name="categoryId" onchange="movePage('category',this.value)">
+    <option value="0">전체</option>
+    <option value="1">쿠요일</option>
+    <option value="2">점심</option>
+    <option value="3">저녁</option>
+    <option value="4">COP</option>
+    <option value="5">번개</option>
+</select>
+<a onclick="movePage('sort', 'gatheringNo')">작성 순</a> | <a onclick="movePage('sort', 'popular')">인기 순</a>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <td>카테고리</td>
+            <td>모임 이름</td>
+            <td>모임 시간</td>
+            <td>장소</td>
+            <td>참가자 수</td>
+            <td>신청 여부</td>
+        </tr>
+        </thead>
+        <tbody>
+        {{#gatheringList.gatherings}}
+        <tr>
+            <td onclick="goDetailInfo({{gatheringNo}})">{{categoryName}}</td>
+            <td onclick="goDetailInfo({{gatheringNo}})">{{gatheringTitle}}</td>
+            <td onclick="goDetailInfo({{gatheringNo}})">{{gatheringAt}}</td>
+            <td onclick="goDetailInfo({{gatheringNo}})">{{gatheringPlace}}</td>
+            <td onclick="goDetailInfo({{gatheringNo}})">{{attendNo}}</td>
+            {{#if exitYn}}
+            <td><input type="button" class="btn btn-default" disabled="disabled" value="종료"></td>
+            {{else}}{{#when attendType 'equals' 1}}
+            <td><input type="button" class="btn btn-primary" id="{{gatheringNo}}" value="신청"
+                       onclick="attendGathering('{{gatheringNo}}')"></td>
+            {{/when}}
+            {{#when attendType 'equals' 2}}
+            <td><input type="button" class="btn btn-success disable" disabled="disabled" value="신청 완료"></td>
+            {{/when}}
+            {{#when attendType 'equals' 3}}
+            <td><input type="button" class="btn btn-info disable" disabled="disabled" value="개설"></td>
+            {{/when}}{{/if}}
+        </tr>
+        {{/gatheringList.gatherings}}
+        </tbody>
+    </table>
+</div>
+<div>
+    <nav style="text-align: center">
+        <ul class="pagination">
+            <li>
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {{#gatheringList.pageNumbers}}
+            <li><a onclick="movePage('page',{{this}})">{{this}}</a></li>
+            {{/gatheringList.pageNumbers}}
+            <li>
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<script>
+
+    $(function () {
+        var query = getQuerystring();
+        var categoryVal = query['category'];
+        if (categoryVal != null) $("#category").val(categoryVal);
+    })
+
+    var state;
+    function movePage(option, value) {
+        var query = getQuerystring();
+        console.log(query);
+        query[option] = value;
+        location.href = location.pathname + '?' + $.param(query, true);
+    }
+
+    function getQuerystring() {
+        var query = location.search.substr(1);
+        var result = {};
+        query.split('&').forEach(function (part) {
+            var item = part.split('=');
+            if (item[1] != undefined) {
+                result[item[0]] = decodeURIComponent(item[1]);
+            }
+        });
+        return result;
+    }
+
+
+    function attendGathering(gatheringNo) {
+        var attendAjx = $.ajax({
+            type: 'get',
+            url: '/gatherings/attend/' + gatheringNo,
+            dataType: 'json'
+        }).done(function (data) {
+            console.log(data);
+            if (data.status) {
+                var attendButton = $("#" + gatheringNo);
+                attendButton.val("신청 완료");
+                attendButton.removeClass("btn-primary").addClass("btn-success");
+                attendButton.attr("disabled", "disabled");
+            } else {
+                alert(data.resultMessage);
+            }
+        }).fail(function (jqXHR, textStatus) {
+            location.href = '/login?returnUrl=/gatherings';
+        })
+    }
+
+
+    function goDetailInfo(gatheringNo) {
+        location.href = '/gatherings/' + gatheringNo;
+    }
+</script>
+{{> layouts/footer}}

@@ -1,0 +1,40 @@
+
+
+{{! ACE 에셋들 }}
+
+{{! base style }}
+{{assetStyle "components/ace/css/bootstrap.min.css"}}
+{{assetStyle "components/ace/css/font-awesome.min.css"}}
+{{assetStyle "components/ace/css/jquery-ui.min.css"}}
+{{assetStyle "components/ace/css/bootstrap-editable.min.css"}}
+
+{{! jqGrid }}
+{{assetStyle "components/ace/css/ui.jqgrid.min.css"}}
+
+{{! jquery.gritter }}
+{{assetStyle "components/ace/css/jquery.gritter.min.css"}}
+
+{{! select-box }}
+{{assetStyle "/components/ace/css/chosen.min.css"}}
+
+{{! ACE 설정이 디펜던시 걸린 애들보다 하단에 선언되어야 한다 (오버라이드) }}
+{{! ace-fonts }}
+{{assetStyle "components/ace/css/ace-fonts.min.css"}}
+
+{{! ace-styles }}
+{{assetStyle "components/ace/css/ace.min.css"}}
+{{assetStyle "components/ace/css/ace-rtl.min.css"}}
+{{assetStyle "components/ace/css/ace-skins.min.css"}}
+
+{{! ace-IE8 }}
+{{assetStyle "/components/ace/css/ace-ie.min.css"}}
+
+<!--[if lt IE 9]>
+        {{assetScript "assets/js/html5shiv.js"}}
+        {{assetScript "assets/js/respond.min.js"}}
+<![endif]-->
+
+
+{{! ace-settings-handler }}
+{{assetScript "components/ace/js/ace-extra.min.js"}}
+
