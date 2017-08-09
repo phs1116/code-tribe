@@ -1,0 +1,3 @@
+rootProject.name = 'make-friends'
+include 'make-friends-domain'
+include 'make-friends-web'

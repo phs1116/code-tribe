@@ -1,0 +1,59 @@
+
+buildscript {
+	ext {
+		springBootVersion = '1.5.6.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+		maven { url "https://plugins.gradle.org/m2/" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+		classpath("io.franzbecker:gradle-lombok:1.8")
+	}
+
+}
+
+subprojects {
+	version = '1.0.0'
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+
+	dependencies {
+		compile('org.springframework.boot:spring-boot-starter-aop')
+		compile('org.springframework.boot:spring-boot-starter-cache')
+		compile('org.springframework.boot:spring-boot-starter-data-rest')
+		compile('org.springframework.retry:spring-retry')
+		//compile('org.springframework.boot:spring-boot-starter-security')
+		compile('org.springframework.boot:spring-boot-starter-validation')
+		compile('org.modelmapper:modelmapper:1.1.0')
+		runtime('org.springframework.boot:spring-boot-devtools')
+		compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+		compileOnly 'org.projectlombok:lombok:1.16.18'
+		testCompile('org.springframework.boot:spring-boot-starter-test')
+		testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
+		testCompile('org.springframework.security:spring-security-test')
+
+		// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat
+		compile('org.springframework.boot:spring-boot-starter-tomcat:1.5.6.RELEASE')
+	}
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = 1.8
+}
+
+repositories {
+	mavenCentral()
+	maven { url "https://repo.spring.io/snapshot" }
+	maven { url "https://repo.spring.io/milestone" }
+}
